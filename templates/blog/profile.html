@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль пользователя{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h2>Мой профиль</h2>
+    
+    <!-- Показываем сообщения об успехе -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Текущая информация профиля -->
+    <div class="current-info">
+        <h3>Текущие данные</h3>
+        <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+        
+        {% if profile.avatar %}
+            <div class="avatar-preview">
+                <img src="{{ profile.avatar.url }}" alt="Аватар" width="150">
+            </div>
+        {% else %}
+            <p>Аватар не загружен</p>
+        {% endif %}
+        
+        {% if profile.resume %}
+            <p><strong>Резюме:</strong> 
+                <a href="{{ profile.resume.url }}" target="_blank">Скачать</a>
+            </p>
+        {% else %}
+            <p>Резюме не загружено</p>
+        {% endif %}
+    </div>
+    
+    <!-- Форма редактирования -->
+    <div class="edit-form">
+        <h3>Редактировать профиль</h3>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.avatar.id_for_label }}">Аватар:</label>
+                {{ form.avatar }}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.resume.id_for_label }}">Резюме (PDF, DOC):</label>
+                {{ form.resume }}
+            </div>
+            
+            <button type="submit" class="btn-save">Сохранить изменения</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .profile-container {
+        background: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    
+    .profile-container h2 {
+        margin-bottom: 20px;
+        color: #2c3e50;
+    }
+    
+    .current-info {
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+    
+    .avatar-preview img {
+        border-radius: 50%;
+        border: 3px solid #ddd;
+    }
+    
+    .edit-form {
+        margin-top: 30px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #555;
+    }
+    
+    .form-group input[type="file"] {
+        padding: 10px;
+        border: 2px dashed #ddd;
+        border-radius: 5px;
+        width: 100%;
+    }
+    
+    .btn-save {
+        background: #3498db;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.3s;
+    }
+    
+    .btn-save:hover {
+        background: #2980b9;
+    }
+    
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        padding: 12px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
